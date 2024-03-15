@@ -8,7 +8,7 @@ namespace BookDemo.Interface
 {
     internal interface ILoanService
     {
-        bool LoanBook(Models.LoanInfo loan);
+        bool Loan(Models.LoanInfo loan);
         bool ReturnLoan(int loanId);
         bool UpdateLoan(Models.LoanInfo loan);
     }

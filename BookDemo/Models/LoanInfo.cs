@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookDemo.Models
 {
-    internal class LoanInfo
+    public class LoanInfo
     {
         public int Id { get; set; }
         public int BookId { get; set; }
