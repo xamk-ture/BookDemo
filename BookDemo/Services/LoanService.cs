@@ -1,4 +1,5 @@
-﻿using BookDemo.Models;
+﻿using BookDemo.Interface;
+using BookDemo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace BookDemo.Services
 {
     internal class BookLoanService : Interface.ILoanService
     {
-        private readonly BookService bookService;
+        private readonly IBookService bookService;
         private List<LoanInfo> loans = new List<LoanInfo>();
 
-        public BookLoanService(BookService service)
+        public BookLoanService(IBookService service)
         {
             bookService = service;
         }
@@ -29,7 +30,20 @@ namespace BookDemo.Services
 
         public bool ReturnLoan(int loanId)
         {
-            throw new NotImplementedException();
+            var loan = loans.FirstOrDefault(l => l.Id == loanId);
+
+            if(loan == null)
+            {
+                return false;
+            }
+
+            var book = bookService.GetBook(loan.BookId);
+            loan.ReturnDate = DateTime.Now;
+
+            book.AvailableCopies++;
+
+
+            return true;
         }
 
         public bool UpdateLoan(LoanInfo loan)

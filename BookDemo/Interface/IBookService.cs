@@ -11,6 +11,8 @@ namespace BookDemo.Interface
     {
         bool IsBookAvailable(int bookId);
 
+        Book? GetBook(int bookId);
+
         bool AddBook(Book book);
     }
 }

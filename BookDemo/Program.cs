@@ -18,7 +18,6 @@ namespace BookDemo
             Console.WriteLine("Hello, World!");
 
             DataPopulator();
-
         }
 
         /// <summary>

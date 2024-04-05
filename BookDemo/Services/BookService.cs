@@ -19,9 +19,14 @@ namespace BookDemo.Services
             return true;
         }
 
+        public Book? GetBook(int bookId)
+        {
+            return books.FirstOrDefault(b => b.Id == bookId);
+        }
+
         public bool IsBookAvailable(int bookId)
         {
-            Book book = books.FirstOrDefault(b => b.Id == bookId);
+            Book? book = books.FirstOrDefault(b => b.Id == bookId);
 
             if(book == null)
             {
