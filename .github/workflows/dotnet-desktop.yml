@@ -1,0 +1,139 @@
+name: Autograding Tests
+'on':
+- push
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: 'Sample 00'
+      id: sample-00
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Sample 00'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./data/sample_00.txt
+        input: ''
+        expected-output: D
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Sample 01'
+      id: sample-01
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Sample 01'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./data/sample_01.txt
+        input: ''
+        expected-output: C
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Sample 02'
+      id: sample-02
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Sample 02'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./data/sample_02.txt
+        input: ''
+        expected-output: C
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Sample 03'
+      id: sample-03
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Sample 03'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./data/sample_03.txt
+        input: ''
+        expected-output: C
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Sample 04'
+      id: sample-04
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Sample 04'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./data/sample_04.txt
+        input: ''
+        expected-output: C
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Instructor Test Case Large'
+      id: instructor-test-case-large
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Instructor Test Case Large'
+        setup-command: chmod 777 ./src/gwiyomi.*; git clone https://github.com/7imeout/GradingResources.git;
+        command: ./src/gwiyomi.py ./GradingResources/cs128/test_large.txt
+        input: ''
+        expected-output: 🌻
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Instructor Test Case Oneoff'
+      id: instructor-test-case-oneoff
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Instructor Test Case Oneoff'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./GradingResources/cs128/test_oneoff.txt
+        input: ''
+        expected-output: 다
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: 'Instructor Test Case Small'
+      id: instructor-test-case-small
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: 'Instructor Test Case Small'
+        setup-command: chmod 777 ./src/gwiyomi.*;
+        command: ./src/gwiyomi.py ./GradingResources/cs128/test_small.txt
+        input: ''
+        expected-output: α
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: Check All TODO Comments Removed
+      id: check-all-todo-comments-removed
+      uses: education/autograding-io-grader@v1
+      with:
+        test-name: Check All TODO Comments Removed
+        setup-command: pwd; echo "Searching for TODOs ...";
+        command: grep -r "TODO" *.py > TODOs.grep.txt; cat ./TODOs.grep.txt; wc
+          -l ./TODOs.grep.txt;
+        input: ''
+        expected-output: 0 ./TODOs.grep.txt
+        comparison-method: exact
+        timeout: 1
+        max-score: 0
+    - name: Autograding Reporter
+      uses: education/autograding-grading-reporter@v1
+      env:
+        SAMPLE-00_RESULTS: "${{steps.sample-00.outputs.result}}"
+        SAMPLE-01_RESULTS: "${{steps.sample-01.outputs.result}}"
+        SAMPLE-02_RESULTS: "${{steps.sample-02.outputs.result}}"
+        SAMPLE-03_RESULTS: "${{steps.sample-03.outputs.result}}"
+        SAMPLE-04_RESULTS: "${{steps.sample-04.outputs.result}}"
+        INSTRUCTOR-TEST-CASE-LARGE_RESULTS: "${{steps.instructor-test-case-large.outputs.result}}"
+        INSTRUCTOR-TEST-CASE-ONEOFF_RESULTS: "${{steps.instructor-test-case-oneoff.outputs.result}}"
+        INSTRUCTOR-TEST-CASE-SMALL_RESULTS: "${{steps.instructor-test-case-small.outputs.result}}"
+        CHECK-ALL-TODO-COMMENTS-REMOVED_RESULTS: "${{steps.check-all-todo-comments-removed.outputs.result}}"
+      with:
+        runners: sample-00,sample-01,sample-02,sample-03,sample-04,instructor-test-case-large,instructor-test-case-oneoff,instructor-test-case-small,check-all-todo-comments-removed
